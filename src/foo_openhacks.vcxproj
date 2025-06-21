@@ -76,19 +76,19 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>$(SolutionDir)dist\sdk\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)dist\sdk\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dist\sdk\foobar2000\shared\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>$(SolutionDir)dist\sdk\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)dist\sdk\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dist\sdk\foobar2000\shared\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(SolutionDir)dist\sdk\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)dist\sdk\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dist\sdk\foobar2000\shared\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(SolutionDir)dist\sdk\;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir);$(SolutionDir)dist\sdk\;$(IncludePath)</IncludePath>
     <LibraryPath>$(SolutionDir)dist\sdk\foobar2000\shared\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -181,11 +181,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="hacks_core.h" />
+    <ClInclude Include="hacks_guids.h" />
     <ClInclude Include="hacks_priv.h" />
     <ClInclude Include="hacks_menu.h" />
     <ClInclude Include="hacks_vars.h" />
     <ClInclude Include="hacks_version.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="ui\preferences_page_impl.h" />
+    <ClInclude Include="ui\ui_dark_mode.h" />
+    <ClInclude Include="ui\ui_dialog_base.h" />
+    <ClInclude Include="ui\ui_pref_advanced.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
@@ -202,6 +208,9 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="ui\ui_dark_mode.cpp" />
+    <ClCompile Include="ui\ui_dialog_base.cpp" />
+    <ClCompile Include="ui\ui_pref_advanced.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\dist\sdk\foobar2000\foobar2000_component_client\foobar2000_component_client.vcxproj">
@@ -216,6 +225,9 @@
     <ProjectReference Include="..\dist\sdk\pfc\pfc.vcxproj">
       <Project>{ebfffb4e-261d-44d3-b89c-957b31a0bf9c}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="foo_openhacks.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

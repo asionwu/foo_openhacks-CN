@@ -124,7 +124,7 @@ void OpenHacksCore::Initialize()
 
             if (OpenHacksVars::ShowMainMenu == false)
             {
-                ShowOrHideMainMenu(false);
+                ShowOrHideMenuBar(false);
             }
         }
 
@@ -181,27 +181,34 @@ void OpenHacksCore::UninstallWindowHooks()
 
 void OpenHacksCore::ToggleStatusBar()
 {
-    if (mStatusBar == nullptr)
-        return;
-
-    OpenHacksVars::ShowStatusBar = !OpenHacksVars::ShowStatusBar;
-    if (HWND window = core_api::get_main_window())
-    {
-        SendMessage(window, WM_SIZE, 0, 0);
-    }
+    const bool value = !OpenHacksVars::ShowStatusBar;
+    if (ShowOrHideStatusBar(value))
+        OpenHacksVars::ShowStatusBar = value;
 }
 
-void OpenHacksCore::ToggleMainMenu()
+void OpenHacksCore::ToggleMenuBar()
 {
     const bool value = !OpenHacksVars::ShowMainMenu;
-    if (ShowOrHideMainMenu(value))
+    if (ShowOrHideMenuBar(value))
         OpenHacksVars::ShowMainMenu = value;
 }
 
-bool OpenHacksCore::ShowOrHideMainMenu(bool value)
+bool OpenHacksCore::ShowOrHideStatusBar(bool /*value*/)
+{
+    if (mStatusBar == nullptr)
+        return false;
+
+    SendMessage(core_api::get_main_window(), WM_SIZE, 0, 0);
+    return true;
+}
+
+bool OpenHacksCore::ShowOrHideMenuBar(bool value)
 {
     if (mRebarWindow == nullptr || mMainMenuWindow == nullptr)
         return false;
+
+    if (IsMenuBarVisible() == value)
+        return true;
 
     const UINT bandCount = (UINT)SendMessage(mRebarWindow, RB_GETBANDCOUNT, 0, 0);
     for (UINT i = 0; i < bandCount; ++i)

@@ -1,6 +1,7 @@
 // dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
 #include "hacks_version.h"
+#include <libPPUI/Controls.h>
 
 BOOL APIENTRY DllMain(HMODULE mod, DWORD reason, LPVOID /*reserved*/)
 {
@@ -8,6 +9,7 @@ BOOL APIENTRY DllMain(HMODULE mod, DWORD reason, LPVOID /*reserved*/)
     {
     case DLL_PROCESS_ATTACH:
         DisableThreadLibraryCalls(mod);
+        CSeparator::Register();
         break;
     case DLL_PROCESS_DETACH:
         break;

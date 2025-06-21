@@ -21,15 +21,22 @@ class OpenHacksCore
     void Finalize();
 
     bool InstallWindowHooks();
-    void UninstallWindowHooks();
-
+    
     void ToggleStatusBar();
-    void ToggleMainMenu();
+    void ToggleMenuBar();
+
+    bool ShowOrHideStatusBar(bool value);
+    bool ShowOrHideMenuBar(bool value);
 
     bool CheckIncompatibleComponents();
 
   private:
-    bool ShowOrHideMainMenu(bool value);
+    FORCEINLINE bool IsMenuBarVisible() const
+    {
+        return mMainMenuWindow != nullptr && IsWindowVisible(mMainMenuWindow);
+    }
+
+    void UninstallWindowHooks();
     bool InstallWindowHooksInternal();
 
   private:

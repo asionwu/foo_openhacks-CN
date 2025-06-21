@@ -59,7 +59,7 @@ class open_hacks_mainmenu_commands : public mainmenu_commands
         switch (p_index)
         {
         case cmd_show_main_menu:
-            OpenHacksCore::Get().ToggleMainMenu();
+            OpenHacksCore::Get().ToggleMenuBar();
             break;
 
         case cmd_show_status_bar:
