@@ -4,6 +4,7 @@
 [Tt]emp/
 .vs/
 ipch/
+JSON/
 *.fb2k-component
 *.aps
 *.plog
@@ -13,4 +14,4 @@ vc*.tlb
 vc*.idl
 vc*.h
 dlldata.c
-JSON/
+vs-*.txt
