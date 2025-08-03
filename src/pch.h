@@ -32,6 +32,7 @@
 #include <atlmisc.h>
 
 #include <foobar2000/SDK/foobar2000-all.h>
+#include "win32_types.h"
 #include "hacks_priv.h"
 
 #endif // PCH_H

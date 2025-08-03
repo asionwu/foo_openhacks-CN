@@ -2,9 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="dllmain.cpp" />
-    <ClCompile Include="hacks_core.cpp" />
     <ClCompile Include="hacks_main_menu.cpp" />
-    <ClCompile Include="hacks_main_window_proc_impl.cpp" />
     <ClCompile Include="hacks_menu.cpp" />
     <ClCompile Include="hacks_vars.cpp" />
     <ClCompile Include="hacks_init_callback.cpp" />
@@ -19,9 +17,26 @@
     <ClCompile Include="ui\ui_dark_mode.cpp">
       <Filter>UI</Filter>
     </ClCompile>
+    <ClCompile Include="ui\ui_pref_main_window.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="hacks_core.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="hacks_core_window_hooks.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="hacks_core_main_window_proc.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="hacks_core_status_bar_proc.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
+    <ClCompile Include="win32_utils.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="hacks_core.h" />
     <ClInclude Include="hacks_priv.h" />
     <ClInclude Include="hacks_menu.h" />
     <ClInclude Include="hacks_vars.h" />
@@ -43,6 +58,18 @@
     <ClInclude Include="ui\ui_dark_mode.h">
       <Filter>UI</Filter>
     </ClInclude>
+    <ClInclude Include="ui\ui_pref_main_window.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="hacks_core.h">
+      <Filter>Core</Filter>
+    </ClInclude>
+    <ClInclude Include="win32_types.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="win32_utils.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -50,6 +77,12 @@
     </Filter>
     <Filter Include="UI">
       <UniqueIdentifier>{c74b4c2e-9441-4004-a1aa-5c92e8a016a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core">
+      <UniqueIdentifier>{7033eac8-fd1c-4a6b-91f7-186ed6d377aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utilities">
+      <UniqueIdentifier>{6b38c3ed-142b-46dc-b42b-cd250bb1760c}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
