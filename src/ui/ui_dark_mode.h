@@ -10,14 +10,14 @@ using CDarkModeHooksImpl = fb2k::CCoreDarkModeHooks;
 
 class CDarkModeHooks : public CDarkModeHooksImpl, private ui_config_callback_impl
 {
-  public:
+public:
     CDarkModeHooks() : CDarkModeHooksImpl(IsDarkMode())
     {
     }
 
     static bool IsDarkMode();
 
-  private:
+private:
     void ui_fonts_changed() override
     {
     }

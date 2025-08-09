@@ -71,6 +71,21 @@ bool OpenHacksCore::IsMainOrChildWindow(HWND wnd)
     return wnd == mMainWindow || IsChild(mMainWindow, wnd);
 }
 
+POINT OpenHacksCore::GetBorderMetrics()
+{
+    const int32_t cx = Utility::GetSystemMetricsForDpi(SM_CXFRAME, OpenHacksVars::DPI) + Utility::GetSystemMetricsForDpi(SM_CXPADDEDBORDER, OpenHacksVars::DPI);
+    const int32_t cy = Utility::GetSystemMetricsForDpi(SM_CYFRAME, OpenHacksVars::DPI) + Utility::GetSystemMetricsForDpi(SM_CXPADDEDBORDER, OpenHacksVars::DPI);
+    return POINT{cx, cy};
+}
+
+Rect OpenHacksCore::GetRectForNonSizing()
+{
+    Rect rect;
+    GetWindowRect(mMainWindow, &rect);
+    const auto border = GetBorderMetrics();
+    return rect.Inflate(-border.x, -border.y);
+}
+
 void OpenHacksCore::ToggleStatusBar()
 {
     const bool value = !OpenHacksVars::ShowStatusBar;
@@ -167,8 +182,7 @@ void OpenHacksCore::ApplyMainWindowFrameStyle(WindowFrameStyle newStyle)
 
     if (newStyle == WindowFrameStyle::NoBorder)
         Utility::EnableWindowShadow(mainWindow, true);
-    
+
     // notify frame changes
     SetWindowPos(mainWindow, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
 }
-

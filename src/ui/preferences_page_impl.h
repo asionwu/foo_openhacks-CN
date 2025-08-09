@@ -17,7 +17,7 @@ static bool window_service_trait_defer_destruction(const service_base*)
 template <typename _parentClass>
 class CWindowFixSEH : public _parentClass
 {
-  public:
+public:
     BOOL ProcessWindowMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult, DWORD dwMsgMapID = 0)
     {
         __try
@@ -39,11 +39,11 @@ class CWindowFixSEH : public _parentClass
 template <typename _t_base>
 class window_service_impl_t : public implement_service_query<CWindowFixSEH<_t_base>>
 {
-  private:
+private:
     typedef window_service_impl_t<_t_base> t_self;
     typedef implement_service_query<CWindowFixSEH<_t_base>> t_base;
 
-  public:
+public:
     BEGIN_MSG_MAP_EX(window_service_impl_t)
         MSG_WM_DESTROY(OnDestroyPassThru)
         CHAIN_MSG_MAP(__super)
@@ -89,7 +89,7 @@ class window_service_impl_t : public implement_service_query<CWindowFixSEH<_t_ba
         PFC_ASSERT(this->m_hWnd == NULL);
     }
 
-  private:
+private:
     void OnDestroyPassThru()
     {
         SetMsgHandled(FALSE);
@@ -117,7 +117,7 @@ service_ptr_t<obj_t> service_new_window(arg_t&&... arg)
 template <typename TDialog>
 class preferences_page_instance_impl : public TDialog
 {
-  public:
+public:
     preferences_page_instance_impl(HWND parent, preferences_page_callback::ptr callback) : TDialog(callback)
     {
         WIN32_OP(this->Create(parent) != NULL);
@@ -139,7 +139,7 @@ static bool window_service_trait_defer_destruction(const preferences_page_instan
 template <typename TDialog>
 class preferences_page_impl : public preferences_page_v3
 {
-  public:
+public:
     preferences_page_instance::ptr instantiate(HWND parent, preferences_page_callback::ptr callback)
     {
         return fb2k::service_new_window<preferences_page_instance_impl<TDialog>>(parent, callback);
@@ -151,7 +151,7 @@ class preferences_page_impl : public preferences_page_v3
     {                                                                                                                                                          \
     class open_hacks_##impl : public preferences_page_impl<impl>                                                                                               \
     {                                                                                                                                                          \
-      public:                                                                                                                                                  \
+    public:                                                                                                                                                    \
         const char* get_name() override                                                                                                                        \
         {                                                                                                                                                      \
             return name;                                                                                                                                       \

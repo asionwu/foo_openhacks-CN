@@ -6,7 +6,7 @@ namespace
 {
 class open_hacks_mainmenu_commands : public mainmenu_commands
 {
-  public:
+public:
     enum
     {
         cmd_show_main_menu = 0,

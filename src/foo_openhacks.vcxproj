@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -135,6 +135,7 @@
     <PostBuildEvent>
       <Command>copy "$(TargetPath)" "$(SolutionDir)..\foobar2000\$(Platform)\foobar2000\components\"</Command>
     </PostBuildEvent>
+    <Manifest />
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
@@ -182,6 +183,9 @@
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="base_window.h" />
+    <ClInclude Include="str.h" />
+    <ClInclude Include="ui_overlay_window.h" />
     <ClInclude Include="win32_utils.h" />
     <ClInclude Include="hacks_core.h" />
     <ClInclude Include="hacks_guids.h" />
@@ -199,7 +203,10 @@
     <ClInclude Include="win32_types.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="base_window.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="str.cpp" />
+    <ClCompile Include="ui_overlay_window.cpp" />
     <ClCompile Include="win32_utils.cpp" />
     <ClCompile Include="hacks_core.cpp" />
     <ClCompile Include="hacks_core_status_bar_proc.cpp" />
@@ -237,6 +244,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="foo_openhacks.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.clang-format" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

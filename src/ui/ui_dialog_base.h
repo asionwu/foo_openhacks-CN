@@ -6,7 +6,7 @@
 template <typename T, UINT DIALOG_ID>
 class UIPrefDialogBase : public CDialogImpl<T>, public preferences_page_instance
 {
-  public:
+public:
     enum
     {
         IDD = DIALOG_ID
@@ -16,7 +16,7 @@ class UIPrefDialogBase : public CDialogImpl<T>, public preferences_page_instance
         MSG_WM_INITDIALOG(OnInitDialog)
     END_MSG_MAP()
 
-  public:
+public:
     UIPrefDialogBase(preferences_page_callback::ptr cb) : mPageCallback(cb)
     {
     }
@@ -47,7 +47,7 @@ class UIPrefDialogBase : public CDialogImpl<T>, public preferences_page_instance
     {
     }
 
-  protected:
+protected:
     BOOL OnInitDialog(CWindow focus, LPARAM param)
     {
         mDarkModeHooks.AddDialogWithControls(*this);
@@ -113,7 +113,7 @@ class UIPrefDialogBase : public CDialogImpl<T>, public preferences_page_instance
         mRestartRequired = false;
     }
 
-  protected:
+protected:
     bool mDialogInitialized = false;
     uint32_t mPageState = 0;
     uint32_t mDefaultPageState = 0;

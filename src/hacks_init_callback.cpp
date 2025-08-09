@@ -1,15 +1,20 @@
 #include "pch.h"
 #include "hacks_core.h"
+#include "hacks_vars.h"
 
 namespace
 {
 
 class open_hacks_init_stage_callback : public init_stage_callback
 {
-  public:
+public:
     void on_init_stage(t_uint32 stage) override
     {
-        if (stage == init_stages::before_ui_init)
+        if (stage == init_stages::after_config_read)
+        {
+            OpenHacksVars::InitialseOpenHacksVars();
+        }
+        else if (stage == init_stages::before_ui_init)
         {
             if (!OpenHacksCore::Get().CheckIncompatibleComponents())
                 return;
@@ -22,7 +27,7 @@ class open_hacks_init_stage_callback : public init_stage_callback
 
 class open_hacks_initquit : public initquit
 {
-  public:
+public:
     // on_init is called after the main window has been created.
     void on_init() override
     {

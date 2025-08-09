@@ -35,6 +35,15 @@
     <ClCompile Include="win32_utils.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="ui_overlay_window.cpp">
+      <Filter>UI</Filter>
+    </ClCompile>
+    <ClCompile Include="base_window.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
+    <ClCompile Include="str.cpp">
+      <Filter>Utilities</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hacks_priv.h" />
@@ -70,6 +79,15 @@
     <ClInclude Include="win32_utils.h">
       <Filter>Utilities</Filter>
     </ClInclude>
+    <ClInclude Include="ui_overlay_window.h">
+      <Filter>UI</Filter>
+    </ClInclude>
+    <ClInclude Include="base_window.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
+    <ClInclude Include="str.h">
+      <Filter>Utilities</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Resources">
@@ -89,5 +107,8 @@
     <ResourceCompile Include="foo_openhacks.rc">
       <Filter>Resources</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.clang-format" />
   </ItemGroup>
 </Project>

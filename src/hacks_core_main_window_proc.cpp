@@ -3,6 +3,7 @@
 #include "hacks_menu.h"
 #include "hacks_vars.h"
 #include "hacks_core.h"
+#include "win32_utils.h"
 
 namespace
 {
@@ -41,8 +42,9 @@ bool OpenHacksCore::OnSysCommand(HWND wnd, WPARAM wp, LPARAM lp)
 LRESULT OpenHacksCore::OnNCHitTest(HWND wnd, WPARAM wp, LPARAM lp)
 {
     const POINT cursor = {GET_X_LPARAM(lp), GET_Y_LPARAM(lp)};
-    const POINT border{GetSystemMetrics(SM_CXFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER), GetSystemMetrics(SM_CYFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER)};
-    const RECT rect = mMainWindowRect;
+    const POINT border = GetBorderMetrics();
+    RECT rect = {};
+    GetWindowRect(mMainWindow, &rect);
     enum EdgeMask
     {
         Left = 0b0001,
@@ -101,10 +103,6 @@ bool OpenHacksCore::OnSetCursor(HWND wnd, WPARAM wp, LPARAM lp)
 
 bool OpenHacksCore::OnSize(HWND wnd, WPARAM wp, LPARAM lp)
 {
-    GetWindowRect(mMainWindow, &mMainWindowRect);
-    const POINT border{GetSystemMetrics(SM_CXFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER), GetSystemMetrics(SM_CYFRAME) + GetSystemMetrics(SM_CXPADDEDBORDER)};
-    mMainWindowRectForSizing = mMainWindowRect;
-    mMainWindowRectForSizing.Inflate(-border.x, -border.y);
     return false;
 }
 
@@ -125,22 +123,18 @@ LRESULT OpenHacksCore::OpenHacksMainWindowProc(HWND wnd, UINT msg, WPARAM wp, LP
             return 1;
         break;
 
-        //     case WM_NCCALCSIZE:
-        //         if (wp == TRUE)
-        //         {
-        //             auto& params = *reinterpret_cast<NCCALCSIZE_PARAMS*>(lp);
-        //             InflateRect(params.rgrc, -2, -2);
-        //             return 0;
-        //         }
-
     case WM_NCACTIVATE:
         if (IsMainWindowBorderless())
-            return 1;
+            return CallWindowProc(mMainWindowOriginProc, wnd, msg, wp, -1);
         break;
 
     case WM_SIZE:
         if (OnSize(wnd, wp, lp))
             return 0;
+        break;
+
+    case WM_DPICHANGED: // fixme: won't receive currently(DPI System aware).
+        OpenHacksVars::DPI = static_cast<uint32_t>(LOWORD(wp));
         break;
 
     default:

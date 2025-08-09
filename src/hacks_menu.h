@@ -2,13 +2,13 @@
 
 class OpenHacksMenu
 {
-  public:
+public:
     static OpenHacksMenu& Get();
 
     HMENU GenerateMenu();
     void ExecuteMenuCommand(int32_t cmd);
 
-  private:
+private:
     enum MainMemuCommands
     {
         CommandRootMenuMaxCount = 1000,
@@ -28,7 +28,7 @@ class OpenHacksMenu
 
     void GenerateMenuUsingManager(HMENU menu, mainmenu_manager::ptr& manager, const GUID& guid, wstring_view_t caption, uint32_t baseId);
 
-  private:
+private:
     mainmenu_manager::ptr mFileMenuPtr;
     mainmenu_manager::ptr mViewMenuPtr;
     mainmenu_manager::ptr mEditMenuPtr;

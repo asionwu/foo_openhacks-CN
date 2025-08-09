@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "hacks_core.h"
 #include "hacks_vars.h"
+#include "win32_utils.h"
 
 namespace
 {
@@ -91,6 +92,7 @@ LRESULT OpenHacksCore::OpenHacksCallWndProc(int code, WPARAM wp, LPARAM lp)
                 {
                     mMainWindow = pcwps->hwnd;
                     mMainWindowOriginProc = (WNDPROC)SetWindowLongPtr(pcwps->hwnd, GWLP_WNDPROC, (LONG_PTR)StaticOpenHacksMainWindowProc);
+                    OpenHacksVars::DPI = Utility::GetDPI(mMainMenuWindow);
                 }
             }
 
@@ -145,7 +147,8 @@ void OpenHacksCore::OnHookMouseMove(LPMSG msg)
 
         const DWORD messagePos = GetMessagePos();
         const POINT pt = {GET_X_LPARAM(messagePos), GET_Y_LPARAM(messagePos)};
-        if (mMainWindowRectForSizing.IsPointIn(pt))
+        const Rect rectForNonSizeing = GetRectForNonSizing();
+        if (rectForNonSizeing.IsPointIn(pt))
             return;
 
         const int32_t hittest = SendMessage(mMainWindow, WM_NCHITTEST, 0, MAKELPARAM(pt.x, pt.y));
@@ -166,20 +169,37 @@ void OpenHacksCore::OnHookLButtonDown(LPMSG msg)
     threadInfo.cbSize = sizeof(threadInfo);
     if (GetGUIThreadInfo(GetCurrentThreadId(), &threadInfo))
     {
-        if (threadInfo.flags & (GUI_INMENUMODE | GUI_INMOVESIZE | GUI_POPUPMENUMODE | GUI_SYSTEMMENUMODE))
+        if (threadInfo.flags & (GUI_INMENUMODE | GUI_POPUPMENUMODE | GUI_SYSTEMMENUMODE))
             return;
 
         const DWORD messagePos = GetMessagePos();
         const POINT pt = {GET_X_LPARAM(messagePos), GET_Y_LPARAM(messagePos)};
-        if (mMainWindowRectForSizing.IsPointIn(pt))
-            return;
 
-        const int32_t hittest = SendMessage(mMainWindow, WM_NCHITTEST, 0, MAKELPARAM(pt.x, pt.y));
-        if (hittest != HTCLIENT)
+        // simulate move
+        const auto& pseudoCaption = OpenHacksVars::PseudoCaptionSettings.get_value();
+        Rect rectPseudoCaption = pseudoCaption.ToRect(mMainWindow);
+        if (rectPseudoCaption.IsPointIn(pt))
         {
-            SendMessage(mMainWindow, WM_SETCURSOR, (WPARAM)mMainWindow, MAKELPARAM(hittest, WM_MOUSEMOVE));
-            SendMessage(mMainWindow, WM_SYSCOMMAND, SC_SIZE | HitTestToWMSZ(hittest), MAKELPARAM(pt.x, pt.y));
+            SendMessage(mMainWindow, WM_SYSCOMMAND, SC_MOVE | HTCAPTION, MAKELPARAM(pt.x, pt.y));
             msg->message = WM_NULL;
+            return;
+        }
+
+        // simulate resizing
+        const Rect rectForNonSizeing = GetRectForNonSizing();
+        if (!rectForNonSizeing.IsPointIn(pt))
+        {
+            if (threadInfo.flags & (GUI_INMOVESIZE))
+                return;
+
+            const int32_t hittest = SendMessage(mMainWindow, WM_NCHITTEST, 0, MAKELPARAM(pt.x, pt.y));
+            if (hittest != HTCLIENT)
+            {
+                SendMessage(mMainWindow, WM_SETCURSOR, (WPARAM)mMainWindow, MAKELPARAM(hittest, WM_MOUSEMOVE));
+                SendMessage(mMainWindow, WM_SYSCOMMAND, SC_SIZE | HitTestToWMSZ(hittest), MAKELPARAM(pt.x, pt.y));
+                msg->message = WM_NULL;
+                return;
+            }
         }
     }
 }

@@ -16,7 +16,7 @@ enum class WindowFrameStyle
 
 class OpenHacksCore
 {
-  public:
+public:
     static OpenHacksCore& Get();
 
     FORCEINLINE bool HasInitError() const
@@ -39,7 +39,7 @@ class OpenHacksCore
 
     void ApplyMainWindowFrameStyle(WindowFrameStyle newStyle);
 
-  private:
+private:
     FORCEINLINE static LRESULT CALLBACK StaticOpenHacksMainWindowProc(HWND wnd, UINT msg, WPARAM wp, LPARAM lp)
     {
         return Get().OpenHacksMainWindowProc(wnd, msg, wp, lp);
@@ -76,8 +76,10 @@ class OpenHacksCore
     bool InstallWindowHooksInternal();
 
     bool IsMainOrChildWindow(HWND wnd);
+    POINT GetBorderMetrics();
+    Rect GetRectForNonSizing();
 
-  private:
+private:
     // main window message handlers
     bool OnSysCommand(HWND wnd, WPARAM wp, LPARAM lp);
     LRESULT OnNCHitTest(HWND wnd, WPARAM wp, LPARAM lp);
@@ -87,7 +89,7 @@ class OpenHacksCore
     void OnHookMouseMove(LPMSG msg);
     void OnHookLButtonDown(LPMSG msg);
 
-  private:
+private:
     HWND mMainWindow = nullptr;
     HWND mRebarWindow = nullptr;
     HWND mMainMenuWindow = nullptr;
@@ -96,10 +98,6 @@ class OpenHacksCore
     HHOOK mGetMsgHook = nullptr;
     WNDPROC mMainWindowOriginProc = nullptr;
     WNDPROC mStatusBarOriginProc = nullptr;
-
-    bool mIsMainWindowSizeMoving = false;
-    Rect mMainWindowRect;
-    Rect mMainWindowRectForSizing;
 
     uint32_t mInitErrors = HacksInitErrors::NoError;
     DWORD mInstallHooksWin32Error = ERROR_SUCCESS;

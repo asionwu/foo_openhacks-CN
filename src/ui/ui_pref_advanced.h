@@ -14,11 +14,11 @@ public:
         REFLECT_NOTIFICATIONS_EX()
     END_MSG_MAP()
 
-  protected:
+protected:
     void OnInitDialog() override;
     void OnApply() override;
 
-  private:
+private:
     void OnCommand(UINT code, int id, CWindow ctrl);
 
     void LoadUIState();
