@@ -135,7 +135,7 @@ LRESULT OpenHacksCore::OpenHacksGetMessageProc(int code, WPARAM wp, LPARAM lp)
 
 void OpenHacksCore::OnHookMouseMove(LPMSG msg)
 {
-    if (!IsMainWindowBorderless())
+    if (OpenHacksVars::MainWindowFrameStyle != WindowFrameStyle::NoBorder)
         return;
 
     GUITHREADINFO threadInfo = {};
@@ -162,7 +162,7 @@ void OpenHacksCore::OnHookMouseMove(LPMSG msg)
 
 void OpenHacksCore::OnHookLButtonDown(LPMSG msg)
 {
-    if (!IsMainWindowBorderless())
+    if (OpenHacksVars::MainWindowFrameStyle == WindowFrameStyle::Default)
         return;
 
     GUITHREADINFO threadInfo = {};
@@ -185,20 +185,23 @@ void OpenHacksCore::OnHookLButtonDown(LPMSG msg)
             return;
         }
 
-        // simulate resizing
-        const Rect rectForNonSizeing = GetRectForNonSizing();
-        if (!rectForNonSizeing.IsPointIn(pt))
+        if (OpenHacksVars::MainWindowFrameStyle == WindowFrameStyle::NoBorder)
         {
-            if (threadInfo.flags & (GUI_INMOVESIZE))
-                return;
-
-            const int32_t hittest = SendMessage(mMainWindow, WM_NCHITTEST, 0, MAKELPARAM(pt.x, pt.y));
-            if (hittest != HTCLIENT)
+            // simulate resizing
+            const Rect rectForNonSizeing = GetRectForNonSizing();
+            if (!rectForNonSizeing.IsPointIn(pt))
             {
-                SendMessage(mMainWindow, WM_SETCURSOR, (WPARAM)mMainWindow, MAKELPARAM(hittest, WM_MOUSEMOVE));
-                SendMessage(mMainWindow, WM_SYSCOMMAND, SC_SIZE | HitTestToWMSZ(hittest), MAKELPARAM(pt.x, pt.y));
-                msg->message = WM_NULL;
-                return;
+                if (threadInfo.flags & (GUI_INMOVESIZE))
+                    return;
+
+                const int32_t hittest = SendMessage(mMainWindow, WM_NCHITTEST, 0, MAKELPARAM(pt.x, pt.y));
+                if (hittest != HTCLIENT)
+                {
+                    SendMessage(mMainWindow, WM_SETCURSOR, (WPARAM)mMainWindow, MAKELPARAM(hittest, WM_MOUSEMOVE));
+                    SendMessage(mMainWindow, WM_SYSCOMMAND, SC_SIZE | HitTestToWMSZ(hittest), MAKELPARAM(pt.x, pt.y));
+                    msg->message = WM_NULL;
+                    return;
+                }
             }
         }
     }

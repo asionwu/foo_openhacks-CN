@@ -124,7 +124,7 @@ LRESULT OpenHacksCore::OpenHacksMainWindowProc(HWND wnd, UINT msg, WPARAM wp, LP
         break;
 
     case WM_NCACTIVATE:
-        if (IsMainWindowBorderless())
+        if (OpenHacksVars::MainWindowFrameStyle == WindowFrameStyle::NoBorder)
             return CallWindowProc(mMainWindowOriginProc, wnd, msg, wp, -1);
         break;
 

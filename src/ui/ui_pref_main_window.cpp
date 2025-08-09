@@ -55,6 +55,8 @@ void UIPrefMainWindowDialog::OnCommand(UINT code, int id, CWindow ctrl)
     switch (code)
     {
     case CBN_SELCHANGE:
+        UpdateCtrlState();
+        [[fallthrough]];
     case EN_CHANGE:
         NotifyStateChanges(true);
         break;
@@ -134,23 +136,29 @@ void UIPrefMainWindowDialog::SaveUIState()
 
 void UIPrefMainWindowDialog::UpdateCtrlState()
 {
-    const bool leftState = uButton_GetCheck(m_hWnd, IDC_CHECK_LEFT);
+    const bool allowState = mComboFrameStyle.GetCurSel() > 0;
+    ::EnableWindow(GetDlgItem(IDC_CHECK_LEFT), allowState);
+    ::EnableWindow(GetDlgItem(IDC_CHECK_TOP), allowState);
+    ::EnableWindow(GetDlgItem(IDC_CHECK_RIGHT), allowState);
+    ::EnableWindow(GetDlgItem(IDC_CHECK_BOTTOM), allowState);
+    
+    const bool leftState = allowState && uButton_GetCheck(m_hWnd, IDC_CHECK_LEFT);
     ::EnableWindow(GetDlgItem(IDC_EDIT_LEFT), leftState);
 
-    const bool topState = uButton_GetCheck(m_hWnd, IDC_CHECK_TOP);
+    const bool topState = allowState && uButton_GetCheck(m_hWnd, IDC_CHECK_TOP);
     ::EnableWindow(GetDlgItem(IDC_EDIT_TOP), topState);
 
-    const bool rightState = uButton_GetCheck(m_hWnd, IDC_CHECK_RIGHT);
+    const bool rightState = allowState && uButton_GetCheck(m_hWnd, IDC_CHECK_RIGHT);
     ::EnableWindow(GetDlgItem(IDC_EDIT_RIGHT), rightState);
 
-    const bool bottomState = uButton_GetCheck(m_hWnd, IDC_CHECK_BOTTOM);
+    const bool bottomState = allowState && uButton_GetCheck(m_hWnd, IDC_CHECK_BOTTOM);
     ::EnableWindow(GetDlgItem(IDC_EDIT_BOTTOM), bottomState);
 
-    const bool widthState = leftState == false || rightState == false;
+    const bool widthState = allowState && (leftState == false || rightState == false);
     ::EnableWindow(GetDlgItem(IDC_STATIC_WIDTH), widthState);
     ::EnableWindow(GetDlgItem(IDC_EDIT_WIDTH), widthState);
 
-    const bool heightState = topState == false || bottomState == false;
+    const bool heightState = allowState && (topState == false || bottomState == false);
     ::EnableWindow(GetDlgItem(IDC_STATIC_HEIGHT), heightState);
     ::EnableWindow(GetDlgItem(IDC_EDIT_HEIGHT), heightState);
 }

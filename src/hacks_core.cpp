@@ -61,11 +61,6 @@ void OpenHacksCore::Finalize()
     UninstallWindowHooks();
 }
 
-bool OpenHacksCore::IsMainWindowBorderless() const
-{
-    return OpenHacksVars::MainWindowFrameStyle == static_cast<int32_t>(WindowFrameStyle::NoBorder);
-}
-
 bool OpenHacksCore::IsMainOrChildWindow(HWND wnd)
 {
     return wnd == mMainWindow || IsChild(mMainWindow, wnd);

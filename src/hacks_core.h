@@ -7,7 +7,7 @@ enum HacksInitErrors : uint32_t
     IncompatibleComponentInstalled = 1 << 1,
 };
 
-enum class WindowFrameStyle
+enum WindowFrameStyle
 {
     Default = 0,
     NoCaption,
@@ -64,8 +64,6 @@ private:
     {
         return mMainMenuWindow != nullptr && IsWindowVisible(mMainMenuWindow);
     }
-
-    bool IsMainWindowBorderless() const;
 
     LRESULT OpenHacksMainWindowProc(HWND wnd, UINT msg, WPARAM wp, LPARAM lp);
     LRESULT OpenHacksCallWndProc(int code, WPARAM wp, LPARAM lp);
