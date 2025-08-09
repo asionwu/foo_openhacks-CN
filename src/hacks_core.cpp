@@ -150,7 +150,7 @@ bool OpenHacksCore::CheckIncompatibleComponents()
 void OpenHacksCore::ApplyMainWindowFrameStyle(WindowFrameStyle newStyle)
 {
     HWND mainWindow = core_api::get_main_window();
-    const LONG currentStyle = GetWindowLongPtr(mainWindow, GWL_STYLE);
+    const LONG currentStyle = static_cast<LONG>(GetWindowLongPtr(mainWindow, GWL_STYLE));
     LONG style = currentStyle;
     switch (newStyle)
     {
