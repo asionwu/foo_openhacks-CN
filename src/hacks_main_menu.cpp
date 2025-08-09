@@ -80,10 +80,12 @@ public:
             switch (p_index)
             {
             case cmd_show_main_menu:
+                p_flags |= flag_defaulthidden;
                 p_flags |= (OpenHacksVars::ShowMainMenu ? flag_checked : 0);
                 break;
 
             case cmd_show_status_bar:
+                p_flags |= flag_defaulthidden;
                 p_flags |= (OpenHacksVars::ShowStatusBar ? flag_checked : 0);
                 break;
 
