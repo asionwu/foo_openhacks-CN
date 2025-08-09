@@ -37,6 +37,7 @@ void OpenHacksCore::Initialize()
         if (HWND rebarWindow = FindWindowExW(window, nullptr, kDUIRebarWindowClassName.data(), nullptr))
         {
             mRebarWindow = rebarWindow;
+            mReBarOriginProc = (WNDPROC)SetWindowLongPtr(mRebarWindow, GWLP_WNDPROC, (LONG_PTR)StaticOpenHacksReBarProc);
             mMainMenuWindow = FindWindowExW(mRebarWindow, nullptr, kDUIMainMenuBandClassName.data(), nullptr);
 
             if (OpenHacksVars::ShowMainMenu == false)

@@ -44,6 +44,9 @@
     <ClCompile Include="str.cpp">
       <Filter>Utilities</Filter>
     </ClCompile>
+    <ClCompile Include="hacks_core_rebar_proc.cpp">
+      <Filter>Core</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="hacks_priv.h" />

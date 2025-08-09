@@ -205,6 +205,7 @@
   <ItemGroup>
     <ClCompile Include="base_window.cpp" />
     <ClCompile Include="dllmain.cpp" />
+    <ClCompile Include="hacks_core_rebar_proc.cpp" />
     <ClCompile Include="str.cpp" />
     <ClCompile Include="ui_overlay_window.cpp" />
     <ClCompile Include="win32_utils.cpp" />

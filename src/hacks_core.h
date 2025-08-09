@@ -60,6 +60,11 @@ private:
         return Get().OpenHacksStatusBarProc(wnd, msg, wp, lp);
     }
 
+    FORCEINLINE static LRESULT CALLBACK StaticOpenHacksReBarProc(HWND wnd, UINT msg, WPARAM wp, LPARAM lp)
+    {
+        return Get().OpenHacksReBarProc(wnd, msg, wp, lp);
+    }
+
     FORCEINLINE bool IsMenuBarVisible() const
     {
         return mMainMenuWindow != nullptr && IsWindowVisible(mMainMenuWindow);
@@ -69,6 +74,7 @@ private:
     LRESULT OpenHacksCallWndProc(int code, WPARAM wp, LPARAM lp);
     LRESULT OpenHacksGetMessageProc(int code, WPARAM wp, LPARAM lp);
     LRESULT OpenHacksStatusBarProc(HWND wnd, UINT msg, WPARAM wp, LPARAM lp);
+    LRESULT OpenHacksReBarProc(HWND wnd, UINT msg, WPARAM wp, LPARAM lp);
 
     void UninstallWindowHooks();
     bool InstallWindowHooksInternal();
@@ -96,6 +102,7 @@ private:
     HHOOK mGetMsgHook = nullptr;
     WNDPROC mMainWindowOriginProc = nullptr;
     WNDPROC mStatusBarOriginProc = nullptr;
+    WNDPROC mReBarOriginProc = nullptr;
 
     uint32_t mInitErrors = HacksInitErrors::NoError;
     DWORD mInstallHooksWin32Error = ERROR_SUCCESS;
