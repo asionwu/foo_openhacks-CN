@@ -107,5 +107,15 @@ extern cfg_struct_t<PseudoCaptionParam> PseudoCaptionSettings;
 // runtime vars
 extern uint32_t DPI;
 
+FORCEINLINE void ToggleShowMainMenu()
+{
+    ShowMainMenu = !ShowMainMenu;
+}
+
+FORCEINLINE void ToggleShowStatusBar()
+{
+    ShowStatusBar = !ShowStatusBar;
+}
+
 void InitialseOpenHacksVars();
 } // namespace OpenHacksVars

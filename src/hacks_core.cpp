@@ -84,23 +84,24 @@ Rect OpenHacksCore::GetRectForNonSizing()
 
 void OpenHacksCore::ToggleStatusBar()
 {
-    const bool value = !OpenHacksVars::ShowStatusBar;
-    ShowOrHideStatusBar(value);
+    if (mStatusBar != nullptr)
+    {
+        OpenHacksVars::ToggleShowStatusBar();
+        ShowOrHideStatusBar(OpenHacksVars::ShowStatusBar);
+    }
 }
 
 void OpenHacksCore::ToggleMenuBar()
 {
-    const bool value = !OpenHacksVars::ShowMainMenu;
-    if (ShowOrHideMenuBar(value))
-        OpenHacksVars::ShowMainMenu = value;
+    OpenHacksVars::ToggleShowMainMenu();
+    if (!ShowOrHideMenuBar(OpenHacksVars::ShowMainMenu))
+        OpenHacksVars::ToggleShowMainMenu();
 }
 
 void OpenHacksCore::ShowOrHideStatusBar(bool value)
 {
     if (mStatusBar == nullptr)
         return;
-    // set value before notify
-    OpenHacksVars::ShowStatusBar = value;
     SendMessage(core_api::get_main_window(), WM_SIZE, 0, 0);
 }
 
