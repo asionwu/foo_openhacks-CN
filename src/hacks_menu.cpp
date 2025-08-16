@@ -69,7 +69,7 @@ void OpenHacksMenu::GenerateMenuUsingManager(HMENU menu, mainmenu_manager::ptr& 
 
     if (HMENU subMenu = CreatePopupMenu())
     {
-        const t_uint32 flags = mainmenu_manager::flag_show_shortcuts | mainmenu_manager::flag_show_shortcuts_global;
+        const t_uint32 flags = mainmenu_manager::flag_show_shortcuts;
         manager->generate_menu_win32(subMenu, baseId, CommandRootMenuMaxCount, flags);
         AppendMenuW(menu, MF_POPUP, (UINT_PTR)subMenu, caption.data());
     }
