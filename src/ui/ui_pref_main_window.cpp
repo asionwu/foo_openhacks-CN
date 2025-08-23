@@ -75,6 +75,7 @@ void UIPrefMainWindowDialog::OnCommand(UINT code, int id, CWindow ctrl)
             ShowOrHidePseudoCaptionOverlayAutomatically();
 
         UpdateCtrlState();
+        NotifyStateChanges(true);
         break;
 
     case IDC_EDIT_LEFT:
