@@ -32,11 +32,11 @@ public:
         switch (p_index)
         {
         case cmd_show_main_menu:
-            p_out = "Show main menu";
+            p_out = "显示主菜单";
             break;
 
         case cmd_show_status_bar:
-            p_out = "Show status bar";
+            p_out = "显示状态栏";
             break;
 
         default:
