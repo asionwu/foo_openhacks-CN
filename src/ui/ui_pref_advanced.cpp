@@ -5,19 +5,19 @@
 #include "hacks_vars.h"
 #include "hacks_guids.h"
 
-DECLARE_PREFERENCES_PAGE(L"楂樼骇", UIPrefAdvancedDialog, 100.0, OpenHacksGuids::kAdvancedPageGuid, OpenHacksGuids::kDUIPageGuid);
+DECLARE_PREFERENCES_PAGE("高级", UIPrefAdvancedDialog, 100.0, OpenHacksGuids::kAdvancedPageGuid, OpenHacksGuids::kDUIPageGuid);
 
 void UIPrefAdvancedDialog::OnInitDialog()
 {
     SetHeaderFont(IDC_PREF_HEADER1);
 
     mComboMenuBar.Attach(GetDlgItem(IDC_MENUBAR));
-    mComboMenuBar.AddString(TEXT("鏄剧ず"));
-    mComboMenuBar.AddString(TEXT("闅愯棌"));
+    mComboMenuBar.AddString(TEXT("显示"));
+    mComboMenuBar.AddString(TEXT("隐藏"));
 
     mComboStatusBar.Attach(GetDlgItem(IDC_STATUSBAR));
-    mComboStatusBar.AddString(TEXT("鏄剧ず"));
-    mComboStatusBar.AddString(TEXT("闅愯棌"));
+    mComboStatusBar.AddString(TEXT("显示"));
+    mComboStatusBar.AddString(TEXT("隐藏"));
 
     LoadUIState();
 }
