@@ -11,12 +11,12 @@ HMENU OpenHacksMenu::GenerateMenu()
 {
     if (HMENU menu = CreatePopupMenu())
     {
-        GenerateMenuUsingManager(menu, mFileMenuPtr, mainmenu_groups::file, L"文件", CommandFileStart);
-        GenerateMenuUsingManager(menu, mEditMenuPtr, mainmenu_groups::edit, L"编辑", CommandEditStart);
-        GenerateMenuUsingManager(menu, mViewMenuPtr, mainmenu_groups::view, L"视图", CommandViewStart);
-        GenerateMenuUsingManager(menu, mPlaybackMenuPtr, mainmenu_groups::playback, L"播放", CommandPlaybackStart);
-        GenerateMenuUsingManager(menu, mLibraryMenuPtr, mainmenu_groups::library, L"媒体库", CommandLibraryStart);
-        GenerateMenuUsingManager(menu, mHelpMenuPtr, mainmenu_groups::help, L"帮助", CommandHelpStart);
+        GenerateMenuUsingManager(menu, mFileMenuPtr, mainmenu_groups::file, pfc::stringcvt::string_utf8_from_wide(L"文件"), CommandFileStart);
+        GenerateMenuUsingManager(menu, mEditMenuPtr, mainmenu_groups::edit, pfc::stringcvt::string_utf8_from_wide(L"编辑"), CommandEditStart);
+        GenerateMenuUsingManager(menu, mViewMenuPtr, mainmenu_groups::view, pfc::stringcvt::string_utf8_from_wide(L"视图"), CommandViewStart);
+        GenerateMenuUsingManager(menu, mPlaybackMenuPtr, mainmenu_groups::playback, pfc::stringcvt::string_utf8_from_wide(L"播放"), CommandPlaybackStart);
+        GenerateMenuUsingManager(menu, mLibraryMenuPtr, mainmenu_groups::library, pfc::stringcvt::string_utf8_from_wide(L"媒体库"), CommandLibraryStart);
+        GenerateMenuUsingManager(menu, mHelpMenuPtr, mainmenu_groups::help, pfc::stringcvt::string_utf8_from_wide(L"帮助"), CommandHelpStart);
 
         return menu;
     }

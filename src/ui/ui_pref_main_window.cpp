@@ -31,9 +31,9 @@ void UIPrefMainWindowDialog::OnInitDialog()
     SetHeaderFont(IDC_PREF_HEADER1);
 
     mComboFrameStyle.Attach(GetDlgItem(IDC_FRAME_STYLE));
-    mComboFrameStyle.AddString(TEXT("默认"));
-    mComboFrameStyle.AddString(TEXT("无标题"));
-    mComboFrameStyle.AddString(TEXT("无边框"));
+    mComboFrameStyle.AddString(L"默认");
+    mComboFrameStyle.AddString(L"无标题");
+    mComboFrameStyle.AddString(L"无边框");
 
     LoadUIState();
     UpdateCtrlState();
