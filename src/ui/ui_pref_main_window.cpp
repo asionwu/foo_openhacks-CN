@@ -5,7 +5,7 @@
 #include "hacks_vars.h"
 #include "hacks_guids.h"
 
-DECLARE_PREFERENCES_PAGE("÷˜¥∞ø⁄", UIPrefMainWindowDialog, 50.0, OpenHacksGuids::kMainWindowPageGuid, preferences_page::guid_display);
+DECLARE_PREFERENCES_PAGE(u8"‰∏ªÁ™óÂè£", UIPrefMainWindowDialog, 50.0, OpenHacksGuids::kMainWindowPageGuid, preferences_page::guid_display);
 
 namespace
 {
@@ -31,9 +31,9 @@ void UIPrefMainWindowDialog::OnInitDialog()
     SetHeaderFont(IDC_PREF_HEADER1);
 
     mComboFrameStyle.Attach(GetDlgItem(IDC_FRAME_STYLE));
-    mComboFrameStyle.AddString(TEXT("ƒ¨»œ"));
-    mComboFrameStyle.AddString(TEXT("Œﬁ±ÍÃ‚"));
-    mComboFrameStyle.AddString(TEXT("Œﬁ±ﬂøÚ"));
+    mComboFrameStyle.AddString(TEXT("ÈªòËÆ§"));
+    mComboFrameStyle.AddString(TEXT("Êó†Ê†áÈ¢ò"));
+    mComboFrameStyle.AddString(TEXT("Êó†ËæπÊ°Ü"));
 
     LoadUIState();
     UpdateCtrlState();
