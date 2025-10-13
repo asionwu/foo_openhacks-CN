@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "ui_pref_main_window.h"
 #include "preferences_page_impl.h"
 #include "hacks_core.h"
