@@ -12,12 +12,12 @@ void UIPrefAdvancedDialog::OnInitDialog()
     SetHeaderFont(IDC_PREF_HEADER1);
 
     mComboMenuBar.Attach(GetDlgItem(IDC_MENUBAR));
-    mComboMenuBar.AddString(L"显示");
-    mComboMenuBar.AddString(L"隐藏");
+    mComboMenuBar.AddString(TEXT("显示"));
+    mComboMenuBar.AddString(TEXT("隐藏"));
 
     mComboStatusBar.Attach(GetDlgItem(IDC_STATUSBAR));
-    mComboStatusBar.AddString(L"显示");
-    mComboStatusBar.AddString(L"隐藏");
+    mComboStatusBar.AddString(TEXT("显示"));
+    mComboStatusBar.AddString(TEXT("隐藏"));
 
     LoadUIState();
 }
