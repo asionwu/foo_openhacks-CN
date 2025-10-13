@@ -5,7 +5,7 @@
 #include "hacks_vars.h"
 #include "hacks_guids.h"
 
-DECLARE_PREFERENCES_PAGE("主窗口", UIPrefMainWindowDialog, 50.0, OpenHacksGuids::kMainWindowPageGuid, preferences_page::guid_display);
+DECLARE_PREFERENCES_PAGE(L"主窗口", UIPrefMainWindowDialog, 50.0, OpenHacksGuids::kMainWindowPageGuid, preferences_page::guid_display);
 
 namespace
 {

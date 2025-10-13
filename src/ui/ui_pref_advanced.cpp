@@ -5,7 +5,7 @@
 #include "hacks_vars.h"
 #include "hacks_guids.h"
 
-DECLARE_PREFERENCES_PAGE("高级", UIPrefAdvancedDialog, 100.0, OpenHacksGuids::kAdvancedPageGuid, OpenHacksGuids::kDUIPageGuid);
+DECLARE_PREFERENCES_PAGE(L"高级", UIPrefAdvancedDialog, 100.0, OpenHacksGuids::kAdvancedPageGuid, OpenHacksGuids::kDUIPageGuid);
 
 void UIPrefAdvancedDialog::OnInitDialog()
 {
