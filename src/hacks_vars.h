@@ -1,5 +1,6 @@
 #pragma once
 #include <algorithm>
+#include "win32_utils.h"
 
 #pragma pack(push)
 #pragma pack(1)
@@ -50,8 +51,7 @@ struct PseudoCaptionParam
     {
         RECT rect = {};
         GetClientRect(wnd, &rect);
-        ClientToScreen(wnd, (LPPOINT)&rect);
-        ClientToScreen(wnd, (LPPOINT)&rect + 1);
+        Utility::ClientToScreen(wnd, rect);
 
         RECT anchor = rect;
         GetWindowRect(wnd, &rect);
@@ -93,6 +93,31 @@ struct PseudoCaptionParam
         return rc;
     }
 };
+
+// Saved window state for custom maximize/restore and fullscreen
+struct WindowStateData
+{
+    bool fullscreen = false;
+    DWORD style = 0;
+    WINDOWPLACEMENT wp = { sizeof(WINDOWPLACEMENT) };
+    int32_t reserved[8] = {};
+
+    void FromWindowState(const WindowState& state)
+    {
+        fullscreen = state.fullscreen;
+        style = state.style;
+        wp = state.wp;
+    }
+
+    WindowState ToWindowState() const
+    {
+        WindowState state;
+        state.fullscreen = fullscreen;
+        state.style = style;
+        state.wp = wp;
+        return state;
+    }
+};
 #pragma pack(pop)
 
 namespace OpenHacksVars
@@ -103,6 +128,7 @@ extern cfg_bool ShowMainMenu;
 extern cfg_bool ShowStatusBar;
 extern cfg_int MainWindowFrameStyle;
 extern cfg_struct_t<PseudoCaptionParam> PseudoCaptionSettings;
+extern cfg_struct_t<WindowStateData> SavedWindowState;
 
 // runtime vars
 extern uint32_t DPI;

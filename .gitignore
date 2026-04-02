@@ -5,6 +5,9 @@
 .vs/
 ipch/
 JSON/
+open*/
+vcpkg*/
+.qoder/
 *.fb2k-component
 *.aps
 *.plog
