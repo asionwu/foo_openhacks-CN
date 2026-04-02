@@ -36,23 +36,23 @@ public:
         switch (p_index)
         {
         case cmd_show_main_menu:
-            p_out = L"显示主菜单";
+            p_out = u8"显示主菜单";
             break;
 
         case cmd_show_status_bar:
-            p_out = L"显示状态栏";
+            p_out = u8"显示状态栏";
             break;
 
         case cmd_maximize:
-            p_out = L"最大化";
+            p_out = u8"最大化";
             break;
 
         case cmd_restore:
-            p_out = L"恢复";
+            p_out = u8"恢复";
             break;
 
         case cmd_fullscreen:
-            p_out = L"全屏";
+            p_out = u8"全屏";
             break;
 
         default:
