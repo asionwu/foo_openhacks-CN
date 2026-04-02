@@ -1,6 +1,7 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "hacks_vars.h"
 #include "hacks_core.h"
+#include "win32_utils.h"
 
 namespace
 {
@@ -11,6 +12,9 @@ public:
     {
         cmd_show_main_menu = 0,
         cmd_show_status_bar,
+        cmd_maximize,
+        cmd_restore,
+        cmd_fullscreen,
         cmd_total
     };
 
@@ -32,11 +36,23 @@ public:
         switch (p_index)
         {
         case cmd_show_main_menu:
-            p_out = "显示主菜单";
+            p_out = L"显示主菜单";
             break;
 
         case cmd_show_status_bar:
-            p_out = "显示状态栏";
+            p_out = L"显示状态栏";
+            break;
+
+        case cmd_maximize:
+            p_out = L"最大化";
+            break;
+
+        case cmd_restore:
+            p_out = L"恢复";
+            break;
+
+        case cmd_fullscreen:
+            p_out = L"全屏";
             break;
 
         default:
@@ -54,6 +70,11 @@ public:
         return mainmenu_groups::view;
     }
 
+    t_uint32 get_sort_priority() override
+    { 
+        return sort_priority_base + 1;
+    }
+
     void execute(t_uint32 p_index, service_ptr_t<service_base> p_callback) override
     {
         switch (p_index)
@@ -64,6 +85,18 @@ public:
 
         case cmd_show_status_bar:
             OpenHacksCore::Get().ToggleStatusBar();
+            break;
+
+        case cmd_maximize:
+            OpenHacksCore::Get().Maximize();
+            break;
+
+        case cmd_restore:
+            OpenHacksCore::Get().Restore();
+            break;
+
+        case cmd_fullscreen:
+            OpenHacksCore::Get().ToggleFullscreen();
             break;
 
         default:
@@ -87,6 +120,33 @@ public:
             case cmd_show_status_bar:
                 p_flags |= flag_defaulthidden;
                 p_flags |= (OpenHacksVars::ShowStatusBar ? flag_checked : 0);
+                break;
+
+            case cmd_maximize:
+            case cmd_restore:
+                {
+                    p_flags |= flag_defaulthidden;
+                    HWND mainWindow = core_api::get_main_window();
+                    // For custom maximize (NoCaption/NoBorder), check saved state
+                    // For standard maximize (Default), use Utility::IsMaximized()
+                    bool isMaximized = OpenHacksCore::Get().IsMaximized();
+                    bool isMinimized = OpenHacksCore::Get().IsMinimized();
+                    // Maximize: disabled when already maximized
+                    // Restore: disabled when window is normal (not maximized, not minimized)
+                    if (p_index == cmd_maximize && isMaximized)
+                        p_flags |= flag_disabled;
+                    else if (p_index == cmd_restore && !isMaximized && !isMinimized)
+                        p_flags |= flag_disabled;
+                }
+                break;
+
+            case cmd_fullscreen:
+                // Fullscreen is always visible (no flag_defaulthidden)
+                // Show checkmark when in fullscreen mode
+                {
+                    HWND mainWindow = core_api::get_main_window();
+                    p_flags |= (Utility::IsFullscreen(mainWindow) ? flag_checked : 0);
+                }
                 break;
 
             default:

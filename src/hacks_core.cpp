@@ -32,7 +32,27 @@ void OpenHacksCore::Initialize()
 
     if (HWND window = core_api::get_main_window())
     {
-        ApplyMainWindowFrameStyle(static_cast<WindowFrameStyle>((int32_t)OpenHacksVars::MainWindowFrameStyle));
+        // Restore saved window state from persistent storage
+        auto& savedWindowData = OpenHacksVars::SavedWindowState.get_value();
+        if (savedWindowData.wp.rcNormalPosition.right > savedWindowData.wp.rcNormalPosition.left &&
+            savedWindowData.wp.rcNormalPosition.bottom > savedWindowData.wp.rcNormalPosition.top)
+        {
+            mSavedWindowState = savedWindowData.ToWindowState();
+        }
+
+        if (mSavedWindowState.has_value() && mSavedWindowState->fullscreen)
+        {
+            WindowState state = {};
+            Utility::EnterFullscreen(window, state);
+        }
+        else
+        {
+            auto newStyle = static_cast<WindowFrameStyle>((int32_t)OpenHacksVars::MainWindowFrameStyle);
+            if (mSavedWindowState.has_value() && (newStyle == WindowFrameStyleNoCaption))
+                newStyle = WindowFrameStyleNoBorder;
+
+            ApplyMainWindowFrameStyle(newStyle);
+        }
 
         if (HWND rebarWindow = FindWindowExW(window, nullptr, kDUIRebarWindowClassName.data(), nullptr))
         {
@@ -151,35 +171,104 @@ bool OpenHacksCore::CheckIncompatibleComponents()
 void OpenHacksCore::ApplyMainWindowFrameStyle(WindowFrameStyle newStyle)
 {
     HWND mainWindow = core_api::get_main_window();
-    const LONG currentStyle = static_cast<LONG>(GetWindowLongPtr(mainWindow, GWL_STYLE));
-    LONG style = currentStyle;
-    switch (newStyle)
+    Utility::ApplyWindowFrameStyle(mainWindow, newStyle);
+    // Handle shadow for NoBorder style
+    if (newStyle == WindowFrameStyleNoBorder)
     {
-    case WindowFrameStyle::Default:
-        style |= (WS_CAPTION | WS_THICKFRAME);
-        break;
-
-    case WindowFrameStyle::NoCaption:
-        style |= WS_THICKFRAME;
-        style &= ~(WS_CAPTION);
-        break;
-
-    case WindowFrameStyle::NoBorder:
-        style &= ~(WS_CAPTION | WS_THICKFRAME);
-        break;
-
-    default:
-        break;
+        // Check if window is maximized - if so, don't enable shadow
+        // (Maximize disables shadow, we shouldn't re-enable it)
+        const bool isMaximized = Utility::IsMaximized(mainWindow) || mSavedWindowState.has_value();
+        Utility::EnableWindowShadow(mainWindow, isMaximized ? false : true);
     }
+}
 
-    if (currentStyle == style)
-        return;
+void OpenHacksCore::Maximize()
+{
+    HWND mainWindow = core_api::get_main_window();
+    // Initialize saved state if not already
+    if (!mSavedWindowState.has_value())
+        mSavedWindowState.emplace();
+    Utility::Maximize(mainWindow, mSavedWindowState.value());
+    // Save to persistent storage
+    OpenHacksVars::SavedWindowState.get_value().FromWindowState(mSavedWindowState.value());
+}
 
-    SetWindowLongPtr(mainWindow, GWL_STYLE, style);
+void OpenHacksCore::Restore()
+{
+    HWND mainWindow = core_api::get_main_window();
+    // Check if minimized - use standard restore
+    if (Utility::IsMinimized(mainWindow))
+    {
+        ShowWindow(mainWindow, SW_RESTORE);
+    }
+    else if (mSavedWindowState.has_value())
+    {
+        Utility::Restore(mainWindow, mSavedWindowState.value());
+        mSavedWindowState.reset();
+        // Clear persistent storage
+        OpenHacksVars::SavedWindowState.get_value() = WindowStateData();
+    }
+    else
+    {
+        // No saved state - use standard restore
+        ShowWindow(mainWindow, SW_RESTORE);
+    }
+}
 
-    if (newStyle == WindowFrameStyle::NoBorder)
-        Utility::EnableWindowShadow(mainWindow, true);
+bool OpenHacksCore::IsMaximized()
+{
+    return mSavedWindowState.has_value() || Utility::IsMaximized(core_api::get_main_window());
+}
 
-    // notify frame changes
-    SetWindowPos(mainWindow, HWND_TOP, 0, 0, 0, 0, SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOSIZE | SWP_NOZORDER | SWP_FRAMECHANGED);
+bool OpenHacksCore::IsMinimized()
+{
+    return Utility::IsMinimized(core_api::get_main_window());
+}
+
+void OpenHacksCore::EnterFullscreen()
+{
+    HWND mainWindow = core_api::get_main_window();
+    // Save current window state
+    auto& state = mSavedWindowState.emplace();
+    state.fullscreen = true;
+    state.style = static_cast<DWORD>(GetWindowLongPtr(mainWindow, GWL_STYLE));
+    GetWindowPlacement(mainWindow, &state.wp);
+
+    Utility::EnterFullscreen(mainWindow, mSavedWindowState.value());
+
+    // Mark fullscreen state in persistent storage
+    OpenHacksVars::SavedWindowState.get_value().FromWindowState(state);
+}
+
+void OpenHacksCore::ExitFullscreen()
+{
+    HWND mainWindow = core_api::get_main_window();
+    // Exit fullscreen
+    if (mSavedWindowState.has_value())
+    {
+        Utility::ExitFullscreen(mainWindow, mSavedWindowState.value());
+        mSavedWindowState.reset();
+
+        // Clear fullscreen state in persistent storage
+        OpenHacksVars::SavedWindowState.get_value() = WindowStateData();
+    }
+    else
+    {
+        const auto newStyle = static_cast<WindowFrameStyle>((int32_t)OpenHacksVars::MainWindowFrameStyle);
+        ApplyMainWindowFrameStyle(newStyle);
+
+        RECT rect = {};
+        GetWindowRect(mainWindow, &rect);
+        OffsetRect(&rect, 10, 10);
+        SetWindowPos(mainWindow, nullptr, rect.left, rect.top, 0, 0, SWP_NOACTIVATE | SWP_NOSIZE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+    }
+}
+
+void OpenHacksCore::ToggleFullscreen()
+{
+    HWND mainWindow = core_api::get_main_window();
+    if (!Utility::IsFullscreen(mainWindow))
+        EnterFullscreen();
+    else
+        ExitFullscreen();
 }
