@@ -20,16 +20,22 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v4
-
+    - uses: actions/checkout@v6
 
     - name: Set up Python
-      uses: actions/setup-python@v5
+      uses: actions/setup-python@v6
       with:
         python-version: '3.x'
 
+    - name: Setup vcpkg
+      uses: johnwason/vcpkg-action@v7
+      with:
+        pkgs: minhook:x86-windows-static-md,minhook:x64-windows-static-md
+        token: ${{ secrets.GITHUB_TOKEN }}
+        revision: b5d1a94fb7f88fd835e360fd23a45a09ceedbf48
+
     - name: Add MSBuild to PATH
-      uses: microsoft/setup-msbuild@v2
+      uses: microsoft/setup-msbuild@v3
       with:
         vs-version: latest
 
@@ -47,7 +53,7 @@ jobs:
       run: python build.py --rebuild
 
     - name: Upload fb2k-component artifact
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: foo_openhacks.fb2k-component
         path: ${{env.SOLUTION_FILE_PATH}}/foo_openhacks.fb2k-component
