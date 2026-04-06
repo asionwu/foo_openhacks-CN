@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "hacks_menu.h"
 
 OpenHacksMenu& OpenHacksMenu::Get()
