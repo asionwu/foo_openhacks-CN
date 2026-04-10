@@ -22,11 +22,32 @@ jobs:
     steps:
     - uses: actions/checkout@v6
 
-
     - name: Set up Python
       uses: actions/setup-python@v6
       with:
         python-version: '3.x'
+
+    - name: Setup vcpkg (x86)
+      uses: johnwason/vcpkg-action@v7
+      with:
+        manifest-dir: ${{ github.workspace }}
+        triplet: x86-windows-static-md
+        token: ${{ secrets.GITHUB_TOKEN }}
+        revision: b5d1a94fb7f88fd835e360fd23a45a09ceedbf48
+
+    - name: Setup vcpkg (x64)
+      uses: johnwason/vcpkg-action@v7
+      with:
+        manifest-dir: ${{ github.workspace }}
+        triplet: x64-windows-static-md
+        token: ${{ secrets.GITHUB_TOKEN }}
+        revision: b5d1a94fb7f88fd835e360fd23a45a09ceedbf48
+
+    - name: Integrate vcpkg with Visual Studio
+      shell: pwsh
+      run: |
+          & "${{ github.workspace }}\vcpkg\vcpkg.exe" integrate install
+          & "${{ github.workspace }}\vcpkg\vcpkg.exe" list
 
     - name: Add MSBuild to PATH
       uses: microsoft/setup-msbuild@v3
